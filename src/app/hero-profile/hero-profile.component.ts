@@ -12,7 +12,7 @@ import { ModalPollComponent } from '../modal-poll/modal-poll.component';
   styleUrls: ['./hero-profile.component.css']
 })
 export class HeroProfileComponent implements OnInit {
-  @ViewChild('modal') modal;
+  @ViewChild('modal', { static: true }) modal;
   private id;
   public heroe: Heroe;
   public question_modal: string;

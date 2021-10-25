@@ -13,7 +13,7 @@ export class ListadoDeHeroesComponent implements OnInit {
   public title = 'Tutorial de Angular - Héroes de Marvel';
   public searchString;
   // The child component : spinner
-  @ViewChild('spi') spinner;
+  @ViewChild('spi', { static: true }) spinner;
   /* public heroes: Array<Heroe> = []; */
 
   constructor(private heroesService: HeroesService, private router:Router) { }
