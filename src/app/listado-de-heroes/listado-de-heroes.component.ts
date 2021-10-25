@@ -16,7 +16,7 @@ export class ListadoDeHeroesComponent implements OnInit {
   @ViewChild('spi', { static: true }) spinner;
   /* public heroes: Array<Heroe> = []; */
 
-  constructor(private heroesService: HeroesService, private router:Router) { }
+  constructor(public heroesService: HeroesService, private router:Router) { }
 
   submitSearch() {
     this.heroesService.resetPager();
