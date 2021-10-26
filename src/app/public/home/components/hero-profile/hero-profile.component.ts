@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Heroe } from '../classes/heroe';
-import { HeroesService } from '../heroes.service';
+import { Heroe } from '../../../../core/models/heroe';
+import { HeroesService } from '../../../../services/heroes/heroes.service';
 import { Location } from '@angular/common';
 import { ModalPollComponent } from '../modal-poll/modal-poll.component';
 

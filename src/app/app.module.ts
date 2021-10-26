@@ -1,16 +1,19 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 
-import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { ListadoDeHeroesComponent } from './listado-de-heroes/listado-de-heroes.component';
-import { HeroesService } from './heroes.service';
-import { HeroProfileComponent } from './hero-profile/hero-profile.component';
-import { SpinnerComponent } from './spinner/spinner.component';
-import { ModalPollComponent } from './modal-poll/modal-poll.component';
-import { CapitalizePipe } from './capitalize.pipe';
+import { HttpClientModule } from "@angular/common/http";
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { ListadoDeHeroesComponent } from "./public/home/components/listado-de-heroes/listado-de-heroes.component";
+import { HeroesService } from "./services/heroes/heroes.service";
+import { HeroProfileComponent } from "./public/home/components/hero-profile/hero-profile.component";
+import { SpinnerComponent } from "./spinner/spinner.component";
+import { ModalPollComponent } from "./public/home/components/modal-poll/modal-poll.component";
+import { CapitalizePipe } from "./capitalize.pipe";
+import { CoreModule } from "./core/core.module";
+import { StoreModule } from '@ngrx/store';
+import { counterReducer } from './store/contador.reducers';
 
 @NgModule({
   declarations: [
@@ -19,15 +22,17 @@ import { CapitalizePipe } from './capitalize.pipe';
     HeroProfileComponent,
     SpinnerComponent,
     ModalPollComponent,
-    CapitalizePipe
+    CapitalizePipe,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    CoreModule,
+    StoreModule.forRoot({ count: counterReducer })
   ],
   providers: [HeroesService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

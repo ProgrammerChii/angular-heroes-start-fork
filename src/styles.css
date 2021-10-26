@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css?family=Anton');
-
+@import url("~bootstrap/dist/css/bootstrap.css");
 body {
     background-color: #d6d6d6 !important;
-    background-image: url(https://lectortebeo.es/wp-content/uploads/2016/10/Marvel-Cosas-Felices.jpg);
+    background-image: url(https://github.com/kates29/angular-heroes-start/blob/master/src/assets/bg.jpg);
     background-size: cover;
     background-blend-mode: darken;
 }
