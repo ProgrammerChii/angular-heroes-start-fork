@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Heroe } from "../core/models/heroe";
+import { Heroe } from "../../core/models/heroe";
 
 export const ApiGetData = createAction('ApiGetData', props<{id : string}>());
 export const ApiGetError = createAction('ApiGetError', props<{id : string}>());

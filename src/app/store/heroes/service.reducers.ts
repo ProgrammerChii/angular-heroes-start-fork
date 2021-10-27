@@ -13,24 +13,24 @@ const initial: ApiState = {
   data: null,
 };
 
-// const _heroesReducer = createReducer(
-//   initialState,
-//   on(loadHeroesSuccess, (state, action) => {
-//       return {
-//         ...state,
-//         heroes: action.heroes,
-//   };
-//   })
-// );
-
-// export function heroesReducer(state, action) {
-//   return _heroesReducer(state, action);
-// }
-
-export const heroesReducer = createReducer(
+const _heroesReducer = createReducer(
   initialState,
-  on(loadHeroesSuccess, (state, action) => ({ heroes: action.heroes, error:null})),
+  on(loadHeroesSuccess, (state, action) => {
+      return {
+        ...state,
+        heroes: action.heroes,
+  };
+  })
 );
+
+export function heroesReducer(state, action) {
+  return _heroesReducer(state, action);
+}
+
+// export const heroesReducer = createReducer(
+//   initialState,
+//   on(loadHeroesSuccess, (state, action) => ({ heroes: action.heroes, error:null})),
+// );
 
 
 export const apiReducer = createReducer(
