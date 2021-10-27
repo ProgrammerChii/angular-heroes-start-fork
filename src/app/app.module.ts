@@ -1,7 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-
 import { HttpClientModule } from "@angular/common/http";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -14,6 +13,8 @@ import { CapitalizePipe } from "./capitalize.pipe";
 import { CoreModule } from "./core/core.module";
 import { StoreModule } from '@ngrx/store';
 import { counterReducer } from './store/contador.reducers';
+import { fromRoot } from "./store";
+import { EffectsModule } from "@ngrx/effects";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { counterReducer } from './store/contador.reducers';
     HttpClientModule,
     FormsModule,
     CoreModule,
-    StoreModule.forRoot({ count: counterReducer })
+    StoreModule.forRoot({ count: counterReducer, apiState: fromRoot.apiReducer , apiSt: fromRoot.heroesReducer  }),
+    EffectsModule.forRoot([fromRoot.ServiceEffects])
   ],
   providers: [HeroesService],
   bootstrap: [AppComponent],

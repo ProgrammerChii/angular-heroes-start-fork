@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import {inc, dec, reset, getCount} from "./contador.actions";
+import {inc, dec, reset } from "./contador.actions";
 
 export const initial = 0;
 
