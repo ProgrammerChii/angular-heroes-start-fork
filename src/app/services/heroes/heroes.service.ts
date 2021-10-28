@@ -3,13 +3,13 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Heroe } from "../../core/models/heroe";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { Store, select } from '@ngrx/store';
-import * as actions from '../../store/contador.actions';
+import { Store, select } from "@ngrx/store";
+import * as actions from "../../store/contador.actions";
 
 @Injectable()
 export class HeroesService {
   count$: Observable<number>;
-  private apiKey = "?apikey=65006fd3de49b19b074ea580b0a2bd7c"
+  private apiKey = "?apikey=65006fd3de49b19b074ea580b0a2bd7c";
   private protocol = "https:";
   private ApiUrl = "//gateway.marvel.com:443/v1/public/";
   public heroes: Array<Heroe> = [];
@@ -38,42 +38,40 @@ export class HeroesService {
 
   public teams = new Map();
 
-  constructor(private http: HttpClient, private store: Store<{count: number}>) {}
+  constructor(
+    private http: HttpClient,
+    private store: Store<{ count: number; apiSt: any }>
+  ) {}
 
   resetPager() {
     this.page = 0;
   }
 
-  getHeroes(nameStartsWith?: string) : Observable<any>{
-    this.count$ = this.store.pipe(select('count'));
-    this.store.subscribe(state => state);
+  getHeroes(nameStartsWith?: string): Observable<any> {
+    this.count$ = this.store.pipe(select("count"));
+    this.store.subscribe((state) => state);
 
-   let nub = this.store.pipe(select('count')).subscribe(
-      s => this.page = s
-   );
-
-   console.log(nub);
-    console.log("TEAMS");
-    console.log(Array.from(this.teams));
+    this.store
+      .pipe(select("count"))
+      .subscribe((s) => (this.page = s));
 
     if (this.page || this.page === 0) {
-      this.page
+      this.page;
     }
-		
 
     const url =
       this.protocol +
       this.ApiUrl +
-      "characters" + this.apiKey +
+      "characters" +
+      this.apiKey +
       "&offset=" +
       this.page * this.step +
       (nameStartsWith ? "&nameStartsWith=" + nameStartsWith : "");
 
-   
     this.http.get<any>(url).subscribe((data) => {
       this.heroes = [];
       this.total = Math.ceil(data.data.total / this.step);
-      console.log("urle",url)
+
       data.data.results.forEach(
         ({ id, name, description, modified, thumbnail, resourceURI }) => {
           this.heroes.push(
@@ -89,19 +87,36 @@ export class HeroesService {
           );
         }
       );
-      console.log("this.heroes", this.heroes)
+      console.log("this.heroes", this.heroes);
       return this.heroes;
     });
-    return ;
+    return;
   }
 
-  getHeroe(id: string): Observable<any> {
+  getHeroesEf(nameStartsWith?: string): Observable<any> {
+    this.count$ = this.store.pipe(select("count"));
+    this.store.pipe(select("count")).subscribe((s) => (this.page = s));
+    this.store.pipe(select("apiSt")).subscribe((s) => console.log(s));
+    this.store.pipe(select("apiSt")).subscribe((s) => (this.total = Math.ceil(s?.heroes?.data?.total / this.step)));
+
+    if (this.page || this.page === 0) {
+      this.page;
+    }
+  
     const url =
       this.protocol +
       this.ApiUrl +
-      "characters/" +
-      id +
-      this.apiKey;
+      "characters" +
+      this.apiKey +
+      "&offset=" +
+      this.page * this.step +
+      (nameStartsWith ? "&nameStartsWith=" + nameStartsWith : "");
+
+    return this.http.get<any>(url);
+  }
+
+  getHeroe(id: string): Observable<any> {
+    const url = this.protocol + this.ApiUrl + "characters/" + id + this.apiKey;
     return this.http.get<any>(url).pipe(catchError(this.handleError));
   }
 

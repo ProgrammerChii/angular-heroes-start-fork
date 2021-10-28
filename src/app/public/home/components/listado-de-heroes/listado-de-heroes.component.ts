@@ -5,6 +5,8 @@ import { Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Observable } from "rxjs";
 import * as actions from "../../../../store/contador.actions";
+import * as actionHeroes from "../../../../store/heroes/service.actions"
+
 import { fromRoot } from "../../../../store";
 
 interface AppState {
@@ -18,7 +20,10 @@ interface AppState {
 })
 export class ListadoDeHeroesComponent implements OnInit {
   count$: Observable<number>;
+  heroes$ : Array<Heroe> = [];
 
+
+ 
   public title = "Tutorial de Angular - Héroes de Marvel";
   public searchString;
     // heroes$ : Observable<Heroe[]>;
@@ -35,6 +40,7 @@ export class ListadoDeHeroesComponent implements OnInit {
   ) {
     this.count$ = store.select("count");
     this.store.subscribe((state) => state);
+ 
   }
 
   submitSearch() {
@@ -44,12 +50,16 @@ export class ListadoDeHeroesComponent implements OnInit {
 
   prevPage() {
     this.decrement();
-    this.heroesService.getHeroes(this.searchString);
+    this.getApiData();
+    // this.heroesService.getHeroes(this.searchString);
   }
 
   nextPage() {
+    
     this.increment();
-    this.heroesService.getHeroes(this.searchString);
+    this.reset();
+    this.getApiData();
+    // this.heroesService.getHeroes(this.searchString);
   }
 
   go_to(id) {
@@ -57,7 +67,8 @@ export class ListadoDeHeroesComponent implements OnInit {
   }
 
   reset() {
-    this.store.dispatch(actions.reset());
+    // this.store.dispatch(actions.reset());
+    this.apiStoreV2.dispatch(actionHeroes.resetStore());
   }
   increment() {
     this.spinner.toggle_spinner();
@@ -76,13 +87,22 @@ export class ListadoDeHeroesComponent implements OnInit {
   }
   ngOnInit() {
     this.count$ = this.store.pipe(select("count"));
-
-    this.heroesService.getHeroes();
+    this.getApiData()
+    // this.heroesService.getHeroes();
   }
-  getApiData(_id){
-    this.apiStore.dispatch(fromRoot.ApiGetData({ id : _id}))
+  getApiData(){
+    console.log("herosgap", this.heroes$);
+    this.reset();
+    this.heroes$.length = 0;
+    this.heroes$.splice(0,this.heroes$.length)
+
     this.apiStoreV2.dispatch(fromRoot.loadHeroes());
-    this.store.subscribe(a => console.log("fran",a));
     
+    this.apiStoreV2.subscribe(({apiSt: {heroes}}) => heroes?.data?.results.forEach((object) => { this.heroes$.push(object)}));
+  }
+ 
+  getApiProfile(_id){
+    this.apiStore.dispatch(fromRoot.ApiGetData({ id : _id}))
+    // this.apiStoreV2.subscribe(a => console.log("fran",a));
   }
 }

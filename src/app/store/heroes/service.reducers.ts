@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 
-import { ApiError, ApiSuccess, loadHeroesSuccess } from "./service.actions";
+import { ApiError, ApiSuccess, loadHeroesSuccess, resetStore } from "./service.actions";;
 import { initialState } from './heroes.state';
   
 export interface ApiState {
@@ -20,7 +20,15 @@ const _heroesReducer = createReducer(
         ...state,
         heroes: action.heroes,
   };
-  })
+  }),
+  on(resetStore, (state, action) => {
+    console.log("state" , state)
+    console.log("action" , action)
+    return {
+      ...state,
+      heroes: initialState,
+};
+}),
 );
 
 export function heroesReducer(state, action) {
@@ -36,5 +44,7 @@ export function heroesReducer(state, action) {
 export const apiReducer = createReducer(
   initial,
   on(ApiError, (state, action) => ({ error: action.error, data: null })),
-  on(ApiSuccess, (state, action) => ({ data: action.data, error: null }))
+  on(ApiSuccess, (state, action) => ({ data: action.data, error: null })),
+
+  
 );

@@ -10,32 +10,35 @@ import {
   loadHeroesSuccess,
 } from "./service.actions";
 
-import { catchError, map, mergeMap, tap } from "rxjs/operators";
+import { catchError, exhaustMap, map, mergeMap, tap } from "rxjs/operators";
 import { of } from "rxjs";
+import { Heroe } from "../../core/models/heroe";
 
 @Injectable()
 export class ServiceEffects {
   constructor(private actions$: Actions, private serviceApi: HeroesService) {}
 
- 
-
-  getDataEffect$ = createEffect(() => {
+  getLoadHeroes$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loadHeroes),
-      tap(() => {
-        console.log("Service Api asasdsasad");
-      }),
-      mergeMap((action) => {
-        console.log("service api in process");
-        return this.serviceApi.getHeroes().pipe(
-          map((res) => loadHeroesSuccess({ heroes: res })),
-          catchError((error) => of(ApiError({ error: error }))),
+      exhaustMap(() =>
+        this.serviceApi.getHeroesEf().pipe(
+          map((heroes: any) =>
+            loadHeroesSuccess({ heroes: heroes as Heroe[] })
+          ),
+          catchError((error: any) =>
+            of(
+              ApiError({
+                error: error,
+              })
+            )
+          ),
           tap(() => {
-            console.log("Service End");
+            console.log("Service LoadHeroes End");
           })
-        );
-      })
-    );
+        )
+      )
+    )
   });
 
   getServiceDataEffect$ = createEffect(() => {
@@ -45,7 +48,7 @@ export class ServiceEffects {
         console.log("Service Api");
       }),
       mergeMap((action) => {
-        console.log("service api in process");
+        console.log("service api in process heroe", action);
         return this.serviceApi.getHeroe(action.id).pipe(
           map((res) => ApiSuccess({ data: res })),
           catchError((error) => of(ApiError({ error: error }))),
@@ -57,4 +60,3 @@ export class ServiceEffects {
     );
   });
 }
-

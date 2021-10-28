@@ -1,10 +1,12 @@
-import { Heroe } from "../../core/models/heroe";
+import { Heroe } from "../../core/interfaces/Heroe";
 
 
 export const initialState : HeroesState = {
-    heroes: [], 
+    heroes: null, 
+    error: null
 };
 
 export interface HeroesState{
-    heroes: any[];
+    heroes: Heroe[];
+    error: any
 }
