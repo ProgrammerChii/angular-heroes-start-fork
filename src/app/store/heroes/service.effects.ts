@@ -12,7 +12,7 @@ import {
 
 import { catchError, exhaustMap, map, mergeMap, tap } from "rxjs/operators";
 import { of } from "rxjs";
-import { Heroe } from "../../core/models/heroe";
+import { Heroe } from "../../core/interfaces/heroe";
 
 @Injectable()
 export class ServiceEffects {
@@ -21,23 +21,22 @@ export class ServiceEffects {
   getLoadHeroes$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loadHeroes),
-      exhaustMap(() =>
-        this.serviceApi.getHeroesEf().pipe(
-          map((heroes: any) =>
-            loadHeroesSuccess({ heroes: heroes as Heroe[] })
+      exhaustMap((action) => {
+        console.log('action', action);
+        return this.serviceApi.getHeroesEf(action.search).pipe(
+          map((heroes: any) => loadHeroesSuccess({ heroes: heroes as Heroe[] })
           ),
-          catchError((error: any) =>
-            of(
-              ApiError({
-                error: error,
-              })
-            )
+          catchError((error: any) => of(
+            ApiError({
+              error: error,
+            })
+          )
           ),
           tap(() => {
             console.log("Service LoadHeroes End");
           })
-        )
-      )
+        );
+        })
     )
   });
 

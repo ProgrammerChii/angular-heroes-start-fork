@@ -5,6 +5,8 @@ import { Heroe } from '../../../../core/models/heroe';
 import { HeroesService } from '../../../../services/heroes/heroes.service';
 import { Location } from '@angular/common';
 import { ModalPollComponent } from '../modal-poll/modal-poll.component';
+import { Store } from '@ngrx/store';
+import { fromRoot } from '../../../../store';
 
 @Component({
   selector: 'app-hero-profile',
@@ -18,11 +20,12 @@ export class HeroProfileComponent implements OnInit {
   public question_modal: string;
   public team:string = "";
 
-  constructor(private route: ActivatedRoute, private heroesService: HeroesService, private _location: Location) { }
+  constructor(private route: ActivatedRoute, private heroesService: HeroesService, private _location: Location,  private apiStore: Store<{ apiState }>,) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.id = params.id;
+      this.getApiProfile(this.id) 
       this.heroesService.getHeroe(this.id).subscribe(data => {
         const temp = data.data.results[0];
         this.heroe = new Heroe(temp.id, temp.name, temp.description, temp. modified, temp.thumbnail, temp.resourceURI,this.heroesService.getTeamColor(temp.id));
@@ -50,4 +53,7 @@ export class HeroProfileComponent implements OnInit {
     this.modal.toggle_modal();
   }
 
+  getApiProfile(_id) {
+    this.apiStore.dispatch(fromRoot.ApiGetData({ id: _id }));
+  }
 }

@@ -94,9 +94,10 @@ export class HeroesService {
   }
 
   getHeroesEf(nameStartsWith?: string): Observable<any> {
+
+    console.log("nameStartsWith", nameStartsWith);
     this.count$ = this.store.pipe(select("count"));
     this.store.pipe(select("count")).subscribe((s) => (this.page = s));
-    this.store.pipe(select("apiSt")).subscribe((s) => console.log(s));
     this.store.pipe(select("apiSt")).subscribe((s) => (this.total = Math.ceil(s?.heroes?.data?.total / this.step)));
 
     if (this.page || this.page === 0) {
