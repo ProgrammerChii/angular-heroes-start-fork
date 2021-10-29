@@ -1,14 +1,19 @@
 import { createReducer, on } from "@ngrx/store";
-import {inc, dec, reset } from "./contador.actions";
+import {inc, dec, reset, backUt } from "./contador.actions";
 
-export const initial = 0;
+
+export const initialState = {
+  backUtil: null,
+  count: 0,
+  
+};
 
 const _counterReducer = createReducer(
-  initial,
-  on(inc, state => state + 1),
-  on(dec, state => state - 1),
-  on(reset, state => 0),
-  
+  initialState,
+  on(inc, (state, action) => ({...state, count: action.count + 1})),
+  on(dec, (state, action) => ({...state, count: action.count - 1})),
+  on(reset, (state, action) => ({...state,count: 0})),
+  on(backUt, (state, action) => ({...state,backUtil: action.backUtil})),
 );
 
 export function counterReducer(state, action){

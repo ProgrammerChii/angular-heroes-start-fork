@@ -40,7 +40,7 @@ export class HeroesService {
 
   constructor(
     private http: HttpClient,
-    private store: Store<{ count: number; apiSt: any }>
+    private store: Store<{ count: any, apiSt: any }>
   ) {}
 
   resetPager() {
@@ -53,7 +53,7 @@ export class HeroesService {
 
     this.store
       .pipe(select("count"))
-      .subscribe((s) => (this.page = s));
+      .subscribe((s) => (this.page = s.count));
 
     if (this.page || this.page === 0) {
       this.page;
@@ -96,7 +96,8 @@ export class HeroesService {
 
     console.log(Array.from(this.teams));
     this.count$ = this.store.pipe(select("count"));
-    this.store.pipe(select("count")).subscribe((s) => (this.page = s));
+    this.store.pipe(select("count")).subscribe((s) => (console.log("service", s)));
+    this.store.pipe(select("count")).subscribe((s) => (this.page = s.count));
     this.store.pipe(select("apiSt")).subscribe((s) => (this.total = Math.ceil(s?.heroes?.data?.total / this.step)));
 
     if (this.page || this.page === 0) {

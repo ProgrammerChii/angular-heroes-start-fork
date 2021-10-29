@@ -15,7 +15,7 @@ export const getStateData = createSelector(
   getData
 )
 
-const getHeroesState = createFeatureSelector<HeroesState>('heroes');
+const getHeroesState = createFeatureSelector<HeroesState>('apiSt');
 
 export const getHeroes = createSelector(getHeroesState, (state: HeroesState) => {
   return state.heroes;

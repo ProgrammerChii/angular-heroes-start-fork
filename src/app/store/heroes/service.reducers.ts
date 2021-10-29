@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 
-import { ApiError, ApiSuccess, loadHeroesSuccess, back } from "./service.actions";;
+import { ApiError, ApiSuccess, loadHeroesSuccess } from "./service.actions";;
 import { initialState } from './heroes.state';
 import { Heroe } from "../../core/interfaces/heroe";
   
@@ -22,7 +22,6 @@ const _heroesReducer = createReducer(
         heroes: action.heroes,
   };
   }),
-  on(back, (state, action) => ({ back: action.back}))
 );
 
 export function heroesReducer(state, action) {

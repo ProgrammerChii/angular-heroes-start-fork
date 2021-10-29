@@ -23,7 +23,7 @@ export class ServiceEffects {
       ofType(loadHeroes),
       exhaustMap((action) => {
         return this.serviceApi.getHeroesEf(action.search).pipe(
-          map((heroes: any) => loadHeroesSuccess({ heroes: heroes as Heroe[] })
+          map((heroes) => loadHeroesSuccess({ heroes: heroes as Heroe[] })
           ),
           catchError((error: any) => of(
             ApiError({

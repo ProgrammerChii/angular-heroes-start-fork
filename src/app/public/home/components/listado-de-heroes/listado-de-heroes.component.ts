@@ -5,11 +5,12 @@ import { Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Observable } from "rxjs";
 import * as actions from "../../../../store/contador.actions";
-import * as actionHeroes from "../../../../store/heroes/service.actions";
 import { fromRoot } from "../../../../store";
+import { getHeroes } from "../../../../store/heroes/service.selector";
 
 interface AppState {
-  count: number;
+  count: any;
+  backUtil: string;
 }
 
 @Component({
@@ -20,11 +21,11 @@ interface AppState {
 export class ListadoDeHeroesComponent implements OnInit {
   count$: Observable<number>;
   heroes$: Array<Heroe> = [];
-
+  public countTs;
   public title = "Héroes de Marvel";
   public searchString: string;
   public back: string;
-  
+
   public group_colors = {
     azul: "#1f8ff7",
     violeta: "#a43de3",
@@ -50,7 +51,8 @@ export class ListadoDeHeroesComponent implements OnInit {
   }
 
   submitSearch() {
-    this.apiStoreV2.dispatch(fromRoot.back({ back: this.searchString }));
+    this.store.dispatch(fromRoot.backUt({ backUtil: this.searchString }));
+
     this.reset();
     this.getApiData();
   }
@@ -71,17 +73,22 @@ export class ListadoDeHeroesComponent implements OnInit {
   reset() {
     this.store.dispatch(actions.reset());
   }
+  getCount() {
+    this.store.pipe().subscribe((s) => (this.countTs = s.count));
+  }
   increment() {
+    this.getCount();
     this.spinner.toggle_spinner();
-    this.store.dispatch(actions.inc());
+    this.store.dispatch(actions.inc(this.countTs));
     setTimeout(() => {
       this.spinner.toggle_spinner();
     }, 1000);
   }
 
   decrement() {
+    this.getCount();
     this.spinner.toggle_spinner();
-    this.store.dispatch(actions.dec());
+    this.store.dispatch(actions.dec(this.countTs));
     setTimeout(() => {
       this.spinner.toggle_spinner();
     }, 1000);
@@ -89,35 +96,35 @@ export class ListadoDeHeroesComponent implements OnInit {
 
   ngOnInit() {
     this.count$ = this.store.pipe(select("count"));
+
     this.getApiData();
   }
 
   getApiData() {
-    this.apiStoreV2.pipe(select("apiSt")).subscribe((s) => {
-      if (s.back?.length > 0) {
-        this.searchString = s.back;
+    this.store.pipe(select("count")).subscribe((s) => (this.countTs = s.count));
+
+    this.store.pipe().subscribe((s) => {
+      if (s.backUtil?.length > 0) {
+        this.searchString = s.backUtil;
       }
     });
 
     this.apiStoreV2.dispatch(
       fromRoot.loadHeroes({ search: this.searchString })
     );
-    this.apiStoreV2.subscribe(
-      (resp) => {
-        this.dataHeroes = resp?.apiSt?.heroes?.data?.results;
-      },
-      (error) => {
-        console.log("error", error);
-      }
-    );
+    let aux: any = [];
+    this.apiStoreV2.select(getHeroes).subscribe((s) => {
+      aux = s;
+      this.dataHeroes = aux?.data?.results;
+    });
   }
 
   getApiProfile(_id) {
     this.apiStore.dispatch(fromRoot.ApiGetData({ id: _id }));
   }
 
-  getColor(id){
-    let string = this.heroesService.getTeamColor(id)
+  getColor(id) {
+    let string = this.heroesService.getTeamColor(id);
     return this.group_colors[string];
   }
 }
