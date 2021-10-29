@@ -27,7 +27,6 @@ export class HeroProfileComponent implements OnInit {
     verde: "#0ea521",
   };
 
-
   constructor(private route: ActivatedRoute, private heroesService: HeroesService, private _location: Location,  private apiStore: Store<{ apiState }>,) { }
 
   ngOnInit() {
