@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Heroe } from '../../../../core/models/heroe';
+import { Heroe } from '../../../../core/interfaces/heroe';
 import { HeroesService } from '../../../../services/heroes/heroes.service';
 import { Location } from '@angular/common';
 import { ModalPollComponent } from '../modal-poll/modal-poll.component';
@@ -26,13 +26,15 @@ export class HeroProfileComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params.id;
       this.getApiProfile(this.id) 
-      this.heroesService.getHeroe(this.id).subscribe(data => {
-        const temp = data.data.results[0];
-        this.heroe = new Heroe(temp.id, temp.name, temp.description, temp. modified, temp.thumbnail, temp.resourceURI,this.heroesService.getTeamColor(temp.id));
-        console.log("Tiene equipo?");
-        console.log(this.heroe.teamColor);
-        this.team = this.heroe.teamColor;
-      });
+
+      this.apiStore.subscribe(
+        ({apiState: {data}}) => {
+              this.heroe=data?.data?.results[0];
+        },
+        (error) => {
+          console.log("error", error);
+        }
+      );
     });
     
   }
@@ -56,4 +58,11 @@ export class HeroProfileComponent implements OnInit {
   getApiProfile(_id) {
     this.apiStore.dispatch(fromRoot.ApiGetData({ id: _id }));
   }
+
+
+  getColor(id){
+    let string = this.heroesService.getTeamColor(id)
+    return string;
+  }
+
 }

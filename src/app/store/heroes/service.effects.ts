@@ -22,7 +22,6 @@ export class ServiceEffects {
     return this.actions$.pipe(
       ofType(loadHeroes),
       exhaustMap((action) => {
-        console.log('action', action);
         return this.serviceApi.getHeroesEf(action.search).pipe(
           map((heroes: any) => loadHeroesSuccess({ heroes: heroes as Heroe[] })
           ),
@@ -47,7 +46,6 @@ export class ServiceEffects {
         console.log("Service Api");
       }),
       mergeMap((action) => {
-        console.log("service api in process heroe", action);
         return this.serviceApi.getHeroe(action.id).pipe(
           map((res) => ApiSuccess({ data: res })),
           catchError((error) => of(ApiError({ error: error }))),
@@ -58,4 +56,6 @@ export class ServiceEffects {
       })
     );
   });
+  
 }
+

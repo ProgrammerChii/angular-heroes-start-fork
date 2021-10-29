@@ -87,7 +87,6 @@ export class HeroesService {
           );
         }
       );
-      console.log("this.heroes", this.heroes);
       return this.heroes;
     });
     return;
@@ -95,7 +94,7 @@ export class HeroesService {
 
   getHeroesEf(nameStartsWith?: string): Observable<any> {
 
-    console.log("nameStartsWith", nameStartsWith);
+    console.log(Array.from(this.teams));
     this.count$ = this.store.pipe(select("count"));
     this.store.pipe(select("count")).subscribe((s) => (this.page = s));
     this.store.pipe(select("apiSt")).subscribe((s) => (this.total = Math.ceil(s?.heroes?.data?.total / this.step)));

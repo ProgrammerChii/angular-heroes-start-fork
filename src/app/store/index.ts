@@ -1,4 +1,4 @@
-import {ApiError, ApiSuccess, ApiGetData, ApiGetError, loadHeroes, loadHeroesSuccess } from './heroes/service.actions';
+import {ApiError, ApiSuccess, ApiGetData, ApiGetError, loadHeroes, loadHeroesSuccess, back } from './heroes/service.actions';
 import { ServiceEffects } from './heroes/service.effects';
 import { apiReducer, heroesReducer } from './heroes/service.reducers';
 import { getStateError, getStateData } from './heroes/service.selector';
@@ -14,6 +14,6 @@ export const fromRoot = {
     getStateError,
     getStateData,
     loadHeroes,
-    loadHeroesSuccess
-
+    loadHeroesSuccess,
+    back
 }

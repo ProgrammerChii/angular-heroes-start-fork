@@ -1,4 +1,4 @@
-<h1 class="text-center">{{ title }}</h1>
+<h1 class="text-center">{{ title  }}</h1>
 <div class="row">
   <form (ngSubmit)="submitSearch()">
     <div class="form-group col-xs-12">
@@ -17,7 +17,7 @@
     <a
       (click)="go_to(heroe.id)"
       class="hero-entry"
-      [style.border-color]="heroesService['group_colors'][heroe.teamColor]"
+      [style.border-color]="getColor(heroe.id)"
       [style.background-image]="
         'url(' + heroe.thumbnail.path + '.' + heroe.thumbnail.extension + ')'
       "
@@ -42,4 +42,3 @@
   </div>
 </div>
 <spinner #spi></spinner>
-<button (click)="getApiData()">inc</button>

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Heroe } from "../../../../core/models/heroe";
+import { Heroe } from "../../../../core/interfaces/heroe";
 import { HeroesService } from "../../../../services/heroes/heroes.service";
 import { Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
@@ -21,12 +21,13 @@ export class ListadoDeHeroesComponent implements OnInit {
   count$: Observable<number>;
   heroes$: Array<Heroe> = [];
 
-  public title = "Tutorial de Angular - Héroes de Marvel";
+  public title = "Héroes de Marvel";
   public searchString;
+  public back;
   // heroes$ : Observable<Heroe[]>;
   // The child component : spinner
   @ViewChild("spi", { static: true }) spinner;
-  dataHeroes:  Array<Heroe> = [];;
+  dataHeroes: Array<Heroe> = [];
   /* public heroes: Array<Heroe> = []; */
 
   constructor(
@@ -41,6 +42,8 @@ export class ListadoDeHeroesComponent implements OnInit {
   }
 
   submitSearch() {
+    this.apiStoreV2.dispatch(fromRoot.back({ back: this.searchString }));
+    this.reset();
     this.getApiData();
   }
 
@@ -57,7 +60,9 @@ export class ListadoDeHeroesComponent implements OnInit {
   go_to(id) {
     this.router.navigateByUrl("/heroe/" + id);
   }
-
+  reset() {
+    this.store.dispatch(actions.reset());
+  }
   increment() {
     this.spinner.toggle_spinner();
     this.store.dispatch(actions.inc());
@@ -78,12 +83,20 @@ export class ListadoDeHeroesComponent implements OnInit {
     this.count$ = this.store.pipe(select("count"));
     this.getApiData();
   }
-  
+
   getApiData() {
-   this.apiStoreV2.dispatch(fromRoot.loadHeroes({search: this.searchString}));
+    this.apiStoreV2.pipe(select("apiSt")).subscribe((s) => {
+      if (s.back?.length > 0) {
+        this.searchString = s.back;
+      }
+    });
+
+    this.apiStoreV2.dispatch(
+      fromRoot.loadHeroes({ search: this.searchString })
+    );
     this.apiStoreV2.subscribe(
       (resp) => {
-        this.dataHeroes=resp?.apiSt?.heroes?.data?.results;
+        this.dataHeroes = resp?.apiSt?.heroes?.data?.results;
       },
       (error) => {
         console.log("error", error);
@@ -93,5 +106,16 @@ export class ListadoDeHeroesComponent implements OnInit {
 
   getApiProfile(_id) {
     this.apiStore.dispatch(fromRoot.ApiGetData({ id: _id }));
+  }
+  public group_colors = {
+    azul: "#1f8ff7",
+    violeta: "#a43de3",
+    naranjo: "#df5c0f",
+    verde: "#0ea521",
+  };
+
+  getColor(id){
+    let string = this.heroesService.getTeamColor(id)
+    return this.group_colors[string];
   }
 }
