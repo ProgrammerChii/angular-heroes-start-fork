@@ -46,14 +46,11 @@ export class ListadoDeHeroesComponent implements OnInit {
     private apiStore: Store<{ apiState }>,
     private apiStoreV2: Store<{ apiSt }>
   ) {
-    this.count$ = store.select("count");
     this.store.subscribe((state) => state);
   }
 
   submitSearch() {
     this.store.dispatch(fromRoot.backUt({ backUtil: this.searchString }));
-
-    this.reset();
     this.getApiData();
   }
 
@@ -95,23 +92,25 @@ export class ListadoDeHeroesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.count$ = this.store.pipe(select("count"));
-
     this.getApiData();
   }
 
   getApiData() {
+
+    
     this.store.pipe(select("count")).subscribe((s) => (this.countTs = s.count));
 
     this.store.pipe().subscribe((s) => {
-      if (s.backUtil?.length > 0) {
-        this.searchString = s.backUtil;
-      }
+ 
+       if (s.count.backUtil?.length > 0) {
+         this.searchString = s.count.backUtil;
+       }
     });
 
     this.apiStoreV2.dispatch(
       fromRoot.loadHeroes({ search: this.searchString })
     );
+
     let aux: any = [];
     this.apiStoreV2.select(getHeroes).subscribe((s) => {
       aux = s;
