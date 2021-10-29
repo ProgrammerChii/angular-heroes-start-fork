@@ -3,7 +3,7 @@ import { Heroe } from "../../core/interfaces/Heroe";
 
 export const ApiGetData = createAction('ApiGetData', props<{id : string}>());
 export const ApiGetError = createAction('ApiGetError', props<{id : string}>());
-export const ApiSuccess = createAction('ApiSuccess', props<{data: any}>());
+export const ApiSuccess = createAction('ApiSuccess', props<{data: Heroe}>());
 export const ApiError = createAction('ApiError', props<{error : any}>());
 export const loadHeroes = createAction('LoadHeroes', props<{search: string}>());
 export const loadHeroesSuccess = createAction('LoadHeroesSuccess', props<{ heroes: Array<Heroe>}>());

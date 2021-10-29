@@ -22,8 +22,8 @@ export class ListadoDeHeroesComponent implements OnInit {
   heroes$: Array<Heroe> = [];
 
   public title = "Héroes de Marvel";
-  public searchString;
-  public back;
+  public searchString: string;
+  public back: string;
   
   public group_colors = {
     azul: "#1f8ff7",
