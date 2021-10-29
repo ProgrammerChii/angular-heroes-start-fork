@@ -20,6 +20,14 @@ export class HeroProfileComponent implements OnInit {
   public question_modal: string;
   public team:string = "";
 
+  public group_colors = {
+    azul: "#1f8ff7",
+    violeta: "#a43de3",
+    naranjo: "#df5c0f",
+    verde: "#0ea521",
+  };
+
+
   constructor(private route: ActivatedRoute, private heroesService: HeroesService, private _location: Location,  private apiStore: Store<{ apiState }>,) { }
 
   ngOnInit() {
@@ -59,10 +67,13 @@ export class HeroProfileComponent implements OnInit {
     this.apiStore.dispatch(fromRoot.ApiGetData({ id: _id }));
   }
 
-
-  getColor(id){
+  getColorString(id){
     let string = this.heroesService.getTeamColor(id)
     return string;
+  }
+  getColor(id){
+    let string = this.heroesService.getTeamColor(id)
+    return this.group_colors[string];
   }
 
 }

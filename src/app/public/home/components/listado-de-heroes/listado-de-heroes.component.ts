@@ -24,6 +24,14 @@ export class ListadoDeHeroesComponent implements OnInit {
   public title = "Héroes de Marvel";
   public searchString;
   public back;
+  
+  public group_colors = {
+    azul: "#1f8ff7",
+    violeta: "#a43de3",
+    naranjo: "#df5c0f",
+    verde: "#0ea521",
+  };
+
   // heroes$ : Observable<Heroe[]>;
   // The child component : spinner
   @ViewChild("spi", { static: true }) spinner;
@@ -107,12 +115,6 @@ export class ListadoDeHeroesComponent implements OnInit {
   getApiProfile(_id) {
     this.apiStore.dispatch(fromRoot.ApiGetData({ id: _id }));
   }
-  public group_colors = {
-    azul: "#1f8ff7",
-    violeta: "#a43de3",
-    naranjo: "#df5c0f",
-    verde: "#0ea521",
-  };
 
   getColor(id){
     let string = this.heroesService.getTeamColor(id)
