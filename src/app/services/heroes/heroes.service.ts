@@ -5,13 +5,13 @@ import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Store, select } from "@ngrx/store";
 import * as actions from "../../store/contador.actions";
+import { environment  } from '../../../environments/environment';
 
 @Injectable()
 export class HeroesService {
   count$: Observable<number>;
-  private apiKey = "?apikey=65006fd3de49b19b074ea580b0a2bd7c";
-  private protocol = "https:";
-  private ApiUrl = "//gateway.marvel.com:443/v1/public/";
+  private apiKey = environment.apiKey;
+  private apiUrl = environment.hostURL;
   public heroes: Array<Heroe> = [];
 
   private handleError(error: HttpErrorResponse): any {
@@ -47,51 +47,6 @@ export class HeroesService {
     this.page = 0;
   }
 
-  getHeroes(nameStartsWith?: string): Observable<any> {
-    this.count$ = this.store.pipe(select("count"));
-    this.store.subscribe((state) => state);
-
-    this.store
-      .pipe(select("count"))
-      .subscribe((s) => (this.page = s.count));
-
-    if (this.page || this.page === 0) {
-      this.page;
-    }
-
-    const url =
-      this.protocol +
-      this.ApiUrl +
-      "characters" +
-      this.apiKey +
-      "&offset=" +
-      this.page * this.step +
-      (nameStartsWith ? "&nameStartsWith=" + nameStartsWith : "");
-
-    this.http.get<any>(url).subscribe((data) => {
-      this.heroes = [];
-      this.total = Math.ceil(data.data.total / this.step);
-
-      data.data.results.forEach(
-        ({ id, name, description, modified, thumbnail, resourceURI }) => {
-          this.heroes.push(
-            new Heroe(
-              id,
-              name,
-              description,
-              modified,
-              thumbnail,
-              resourceURI,
-              this.getTeamColor(id)
-            )
-          );
-        }
-      );
-      return this.heroes;
-    });
-    return;
-  }
-
   getHeroesEf(nameStartsWith?: string): Observable<any> {
 
     console.log(Array.from(this.teams));
@@ -105,10 +60,9 @@ export class HeroesService {
     }
   
     const url =
-      this.protocol +
-      this.ApiUrl +
+      this.apiUrl +
       "characters" +
-      this.apiKey +
+      "?apikey=" + this.apiKey +
       "&offset=" +
       this.page * this.step +
       (nameStartsWith ? "&nameStartsWith=" + nameStartsWith : "");
@@ -117,7 +71,7 @@ export class HeroesService {
   }
 
   getHeroe(id: string): Observable<any> {
-    const url = this.protocol + this.ApiUrl + "characters/" + id + this.apiKey;
+    const url = this.apiUrl + "characters/" + id + "?apikey=" + this.apiKey;
     return this.http.get<any>(url).pipe(catchError(this.handleError));
   }
 

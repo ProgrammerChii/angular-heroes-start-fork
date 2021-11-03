@@ -14,6 +14,7 @@ describe('ModalPollComponent', () => {
   }));
 
   beforeEach(() => {
+    console.log("enter");
     fixture = TestBed.createComponent(ModalPollComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

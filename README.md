@@ -1,5 +1,5 @@
 # Correr el proyecto
-yarn start
+yarn && yarn start
 ## 
 
 ### 
