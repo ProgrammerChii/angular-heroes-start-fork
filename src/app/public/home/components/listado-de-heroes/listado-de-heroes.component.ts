@@ -19,7 +19,6 @@ interface AppState {
   styleUrls: ["./listado-de-heroes.component.css"],
 })
 export class ListadoDeHeroesComponent implements OnInit {
-  count$: Observable<number>;
   heroes$: Array<Heroe> = [];
   public countTs;
   public title = "Héroes de Marvel";

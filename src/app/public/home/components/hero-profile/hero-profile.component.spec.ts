@@ -14,7 +14,7 @@ describe('HeroProfileComponent', () => {
   let fixture: ComponentFixture<HeroProfileComponent>;
   let heroesService: HeroesService;
 
-  const storeMock = {
+  const storeHeroe = {
     select() {
       return of([{
         id:'1',
@@ -35,7 +35,6 @@ describe('HeroProfileComponent', () => {
     back():void {}
   }
 
-
   beforeEach((() => {
     TestBed.configureTestingModule({
       schemas: [
@@ -53,12 +52,20 @@ describe('HeroProfileComponent', () => {
       providers: [
         { provide: ComponentFixtureAutoDetect, useValue: true },
         { provide: HeroesService, useClass: HeroServiceMock },
-        { provide: Store, useValue: storeMock },
+        { provide: Store, useValue: storeHeroe },
         { provide: Location, useClass: LocationMock}
       ]
     })
     .compileComponents();
   }));
+
+  beforeEach(async() => {
+    heroesService = TestBed.get(HeroesService);
+    fixture = TestBed.createComponent(HeroProfileComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
 
   it('should create', () => {
     expect(component).toBeTruthy();

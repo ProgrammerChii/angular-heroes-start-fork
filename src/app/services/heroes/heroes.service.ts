@@ -9,7 +9,6 @@ import { environment  } from '../../../environments/environment';
 
 @Injectable()
 export class HeroesService {
-  count$: Observable<number>;
   private apiKey = environment.apiKey;
   private apiUrl = environment.hostURL;
   public heroes: Array<Heroe> = [];
@@ -48,10 +47,6 @@ export class HeroesService {
   }
 
   getHeroesEf(nameStartsWith?: string): Observable<any> {
-
-    console.log(Array.from(this.teams));
-    this.count$ = this.store.pipe(select("count"));
-    this.store.pipe(select("count")).subscribe((s) => (console.log("service", s)));
     this.store.pipe(select("count")).subscribe((s) => (this.page = s.count));
     this.store.pipe(select("apiSt")).subscribe((s) => (this.total = Math.ceil(s?.heroes?.data?.total / this.step)));
 
