@@ -54,11 +54,11 @@ describe('HeroesService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should test getHeroesEf function', () => {
-    heroesService.getHeroesEf = jasmine.createSpy('getHeroesEf').and.callThrough();
-    heroesService.getHeroesEf();
-    expect(heroesService.getHeroesEf).toHaveBeenCalled();
-    expect(heroesService.heroes).toBeDefined();
-  });
+  // it('should test getHeroesEf function', () => {
+  //   heroesService.getHeroesEf = jasmine.createSpy('getHeroesEf').and.callThrough();
+  //   heroesService.getHeroesEf();
+  //   expect(heroesService.getHeroesEf).toHaveBeenCalled();
+  //   expect(heroesService.heroes).toBeDefined();
+  // });
 
 });

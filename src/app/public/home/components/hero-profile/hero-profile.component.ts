@@ -62,7 +62,7 @@ export class HeroProfileComponent implements OnInit {
     this.modal.toggle_modal();
   }
 
-  getApiProfile(_id) {
+  public getApiProfile(_id) {
     this.apiStore.dispatch(fromRoot.ApiGetData({ id: _id }));
   }
 
